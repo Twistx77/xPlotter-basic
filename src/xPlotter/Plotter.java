@@ -8,9 +8,18 @@ import javafx.stage.Stage;
 
 public class Plotter extends Application {
 
+    MainWindowController mainWindowController;
+    ComProtocol comProtocol;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
+        Parent root = loader.load();
+        mainWindowController = loader.getController();
+
+        comProtocol = new ComProtocol(mainWindowController);
+
+        mainWindowController.setCommProtocol(comProtocol);
         primaryStage.setTitle("Plotter");
         primaryStage.setScene(new Scene(root, 1000, 700));
         primaryStage.show();

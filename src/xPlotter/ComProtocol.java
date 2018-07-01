@@ -10,11 +10,12 @@ public class ComProtocol {
 
 
     private SerialHandler serialHandler;
+    private MainWindowController mainWindowController;
 
-
-    public ComProtocol() {
+    public ComProtocol(MainWindowController mainWindowController ) {
 
         serialHandler = new SerialHandler(this);
+        this.mainWindowController = mainWindowController;
 
     }
 
@@ -25,8 +26,9 @@ public class ComProtocol {
      *
      * @return ArrayList with the names of the serial ports found.
      */
-    public ArrayList getAvailableSerialPorts() {
-        return new ArrayList(Arrays.asList(serialHandler.getAvailableSerialPorts()));
+    public String[] getAvailableSerialPorts() {
+        //return new ArrayList(Arrays.asList(serialHandler.getAvailableSerialPorts()));
+        return serialHandler.getAvailableSerialPorts();
     }
 
     /**

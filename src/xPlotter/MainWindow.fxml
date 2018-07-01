@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xPlotter.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xPlotter.MainWindowController">
    <children>
       <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -29,7 +29,7 @@
                                     <VBox prefHeight="77.0" prefWidth="179.0">
                                        <children>
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Port" />
-                                          <ComboBox fx:id="cbPort" prefWidth="150.0" />
+                                          <ComboBox fx:id="cbPorts" prefWidth="150.0" />
                                        </children>
                                     </VBox>
                                     <VBox prefHeight="77.0" prefWidth="179.0">
@@ -63,12 +63,12 @@
             </Accordion>
          </left>
          <center>
-            <LineChart fx:id="plot" BorderPane.alignment="CENTER">
+            <LineChart fx:id="plot" title="asda" BorderPane.alignment="CENTER">
               <xAxis>
-                <CategoryAxis side="BOTTOM" />
+                <NumberAxis side="BOTTOM" fx:id="xAxis" />
               </xAxis>
               <yAxis>
-                <NumberAxis side="LEFT" />
+                <NumberAxis fx:id="yAxis" side="LEFT" tickLabelFill="#bf2222" />
               </yAxis>
                <cursor>
                   <Cursor fx:constant="CROSSHAIR" />
