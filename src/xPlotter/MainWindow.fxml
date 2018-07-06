@@ -49,24 +49,17 @@
                         </AnchorPane>
                   </content>
                 </TitledPane>
-                <TitledPane animated="false" text="Plot">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  </content>
-                </TitledPane>
+                <TitledPane animated="false" text="Plot" />
                 <TitledPane animated="false" text="untitled 3">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
-                     <graphic>
-                        <SwingNode fx:id="node" />
-                     </graphic>
                 </TitledPane>
               </panes>
             </Accordion>
          </left>
-         <center>
-            <LineChart fx:id="plot" title="asda" BorderPane.alignment="CENTER">
+         <right>
+            <LineChart fx:id="plot" prefHeight="800.0" prefWidth="3.0" title="asda" BorderPane.alignment="CENTER">
               <xAxis>
                 <NumberAxis side="BOTTOM" fx:id="xAxis" />
               </xAxis>
@@ -77,6 +70,9 @@
                   <Cursor fx:constant="CROSSHAIR" />
                </cursor>
             </LineChart>
+         </right>
+         <center>
+            <SwingNode fx:id="node" BorderPane.alignment="CENTER" />
          </center>
       </BorderPane>
    </children>
