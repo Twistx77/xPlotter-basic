@@ -80,13 +80,12 @@ public class MainWindowController implements Initializable  {
         sw.displayChart();
 
         JPanel pnlChart = new XChartPanel(chart);
-        // panel.setLayout(null);
-        //panel.add(new SwingWrapper(chart));
+
 
 // Show it
 
 
-        node.setContent(pnlChart);
+        //node.setContent(pnlChart);
 
         xAxis.setAnimated(false);
         xAxis.setLabel("Tick");
@@ -115,7 +114,7 @@ public class MainWindowController implements Initializable  {
                     //series.getData().add(new XYChart.Data<>(tick.incrementAndGet(), (int) (Math.random() * 100)));
                     //Platform.runLater(() -> series.getData().add(new XYChart.Data<>(tick.incrementAndGet(), (int) (Math.random() * 100))));
                     Platform.runLater(() -> chart.updateXYSeries("sine", data[0], data[1], null));
-                    sw.repaintChart();
+                   // sw.repaintChart();
                     System.out.println(tick.incrementAndGet() + " " + data[0]);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
