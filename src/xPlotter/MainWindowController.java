@@ -31,6 +31,7 @@ import org.knowm.xchart.XYChart;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -75,12 +76,9 @@ public class MainWindowController implements Initializable  {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-
-
-
     }
 
-    public void setCommProtocol (ComProtocol comProtocol)
+    public void setCommProtocol(ComProtocol comProtocol)
     {
 
         this.comProtocol = comProtocol;
@@ -89,6 +87,8 @@ public class MainWindowController implements Initializable  {
         cbPorts.getSelectionModel().select(0);
         startChart();
     }
+
+
 
     public void startChart(){
 
@@ -140,7 +140,7 @@ public class MainWindowController implements Initializable  {
 
 
 
-        Thread updateThread = new Thread(() -> {
+        /*Thread updateThread = new Thread(() -> {
             while (true) {
                 try {
 
@@ -155,7 +155,7 @@ public class MainWindowController implements Initializable  {
                     //Platform.runLater(() -> chart.updateXYSeries("sine", data[0], data[1], null));
 
                     this.timeSeriesCollection.getSeries(0).add(new Millisecond(),1000);
-                    this.timeSeriesCollection.getSeries(1).add(new Millisecond(),2x00);
+                    this.timeSeriesCollection.getSeries(1).add(new Millisecond(),200);
                     //this.timeSeriesCollection.getSeries(2).add(new Millisecond(),in_z);
 
                    // sw.repaintChart();
@@ -165,15 +165,23 @@ public class MainWindowController implements Initializable  {
                 }
             }
         });
+
         updateThread.setDaemon(true);
 
         System.out.println("hola");
         updateThread.start();
+        */
 
 
 
 
 
+    }
+
+
+    @FXML
+    public void btnConnectPressed(){
+        comProtocol.connect(cbPorts.getValue(),115200);
     }
 
 
@@ -228,5 +236,13 @@ public class MainWindowController implements Initializable  {
             yData[i] = Math.sin(radians);
         }
         return new double[][] { xData, yData };
+    }
+
+    public void addNewValues(ArrayList<Float> values)
+    {
+
+        for (int i = 0; i< values.size(); i++) {
+            this.timeSeriesCollection.getSeries(i).add(new Millisecond(), values.get(i));
+        }
     }
 }

@@ -1,5 +1,7 @@
 package xPlotter;
 
+import sun.misc.Signal;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -9,13 +11,15 @@ import java.util.logging.Logger;
 public class ComProtocol {
 
 
+    private final Signals signals;
     private SerialHandler serialHandler;
     private MainWindowController mainWindowController;
 
-    public ComProtocol(MainWindowController mainWindowController ) {
+    public ComProtocol(MainWindowController mainWindowController, Signals signals) {
 
         serialHandler = new SerialHandler(this);
         this.mainWindowController = mainWindowController;
+        this.signals = signals;
 
     }
 
@@ -55,4 +59,8 @@ public class ComProtocol {
         }
     }
 
+    public void addNewValues(ArrayList<Float> values) {
+
+        signals.addNewValues(values);
+    }
 }

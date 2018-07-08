@@ -40,7 +40,7 @@
                                     </VBox>
                                     <Pane nodeOrientation="RIGHT_TO_LEFT">
                                        <children>
-                                          <Button fx:id="btnConnect" alignment="CENTER" layoutX="4.099999904632568" layoutY="3.0999999046325684" mnemonicParsing="false" text="Connect" textAlignment="CENTER" />
+                                          <Button fx:id="btnConnect" alignment="CENTER" layoutX="4.099999904632568" layoutY="3.0999999046325684" mnemonicParsing="false" onAction="#btnConnectPressed" text="Connect" textAlignment="CENTER" />
                                        </children>
                                     </Pane>
                                  </children>

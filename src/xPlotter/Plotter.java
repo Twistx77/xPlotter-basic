@@ -17,7 +17,9 @@ public class Plotter extends Application {
         Parent root = loader.load();
         mainWindowController = loader.getController();
 
-        comProtocol = new ComProtocol(mainWindowController);
+
+        Signals signals = new Signals(mainWindowController);
+        comProtocol = new ComProtocol(mainWindowController, signals);
 
         mainWindowController.setCommProtocol(comProtocol);
         primaryStage.setTitle("Plotter");

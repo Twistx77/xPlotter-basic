@@ -1,8 +1,10 @@
 package xPlotter;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
@@ -112,14 +114,42 @@ public class SerialHandler {// implements SerialPortEventListener {
 
         byte buffer[] = new byte[2];
 
+        StringBuilder message = new StringBuilder();
+
         public void serialEvent(SerialPortEvent event) {
             if (event.isRXCHAR()) {//If data is available
                 try {
-                    while (event.getEventValue() > 0) {
+                    /*while (event.getEventValue() > 0) {
                         buffer = serialPort.readBytes(1);
+                        serialPort.readString();*/
+
+                        byte buffer[] = serialPort.readBytes();
+                        for (byte b: buffer) {
+                            if ( ( b == '\n') && message.length() > 0) {
+                                String toProcess = message.toString();
+                                Platform.runLater(new Runnable() {
+                                    @Override public void run() {
+
+                                        String[] strings = toProcess.split(",");
+
+                                        ArrayList<Float> values  = new ArrayList<Float>();
+
+                                        for (int i = 0; i < strings.length; i++ )
+                                        {
+                                            values.add(Float.parseFloat(strings[0]));
+                                        }
+                                        commProtocol.addNewValues(values);
+                                    }
+                                });
+                                message.setLength(0);
+                            }
+                            else {
+                                message.append((char)b);
+                            }
+                        }
                         //System.out.print(Integer.toHexString(buffer[0]&0xFF)+" ");
                        // comProtocol.receivedByte(buffer[0]);
-                    }
+
                 } catch (SerialPortException ex) {
                     System.err.println(ex);
                 }
