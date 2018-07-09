@@ -53,14 +53,6 @@ public class MainWindowController implements Initializable  {
     @FXML
     private ComboBox<String> cbPorts, cbBaudrates;
 
-    @FXML
-    private LineChart<Number, Number> plot;
-
-    @FXML
-    NumberAxis xAxis;
-
-    @FXML
-    NumberAxis yAxis;
 
     @FXML
     SwingNode node;
@@ -91,39 +83,6 @@ public class MainWindowController implements Initializable  {
 
 
     public void startChart(){
-
-
-
-
-        xAxis.setAnimated(false);
-            xAxis.setLabel("Tick");
-
-        yAxis.setAnimated(false);
-        yAxis.setLabel("Value");
-
-       // XYChart.Series<Number, Number> series = new XYChart.Series<>();
-       // series.setName("Values");
-
-        //plot = new LineChart<>(xAxis, yAxis);
-        //plot = new LineChart<>(xAxis, yAxis);
-        plot.setAnimated(false);
-      //  plot.getData().add(series);
-
-
-
-
-
-
-
-
-        timeSeriesCollection = new TimeSeriesCollection();
-        seriesX = new TimeSeries("SensorX");
-        seriesY = new TimeSeries("SensorY");
-        seriesZ = new TimeSeries("SensorZ");
-
-        timeSeriesCollection.addSeries(seriesX);
-        timeSeriesCollection.addSeries(seriesY);
-        timeSeriesCollection.addSeries(seriesZ);
 
 
 
@@ -199,7 +158,6 @@ public class MainWindowController implements Initializable  {
 
         chart.setBackgroundPaint(new Color(0xF4, 0xF4, 0xF4));
 
-
         XYPlot plot = (XYPlot) chart.getPlot();
 
         XYLineAndShapeRenderer r1 = new XYLineAndShapeRenderer();
@@ -209,19 +167,10 @@ public class MainWindowController implements Initializable  {
         r1.setSeriesShapesVisible(1,  false);
         plot.getRenderer().setSeriesPaint(0, new Color(166, 226, 46));
         plot.getRenderer().setSeriesPaint(1, new Color(77, 196, 240));
-       // plot.getRenderer().se
-                /*
-                self.leftReadingPlot = SmoothLinePlot(color=[0.65 , 0.886 , 0.18,1])
-        self.rightReadingPlot = SmoothLinePlot(color=[0.98 , 0.15 , 0.38,1])
-        self.topReadingPlot = SmoothLinePlot(color=[0.3, 0.77 , 0.94,1])
-                 */
-        //plot.setDataset(0, seriesX);
-       // plot.setRenderer(0, r1);
-
 
         DateAxis axis = (DateAxis) plot.getDomainAxis();
         axis.setAutoRange(true);
-        axis.setFixedAutoRange(6000.0);
+        //axis.setFixedAutoRange(6000.0);
 
         return chart;
     }

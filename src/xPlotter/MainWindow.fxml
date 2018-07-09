@@ -1,79 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.embed.swing.SwingNode?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xPlotter.MainWindowController">
    <children>
       <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <left>
-            <Accordion BorderPane.alignment="CENTER">
-              <panes>
-                <TitledPane animated="false" text="Connection">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <VBox layoutX="41.0" layoutY="14.0" prefHeight="321.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <VBox prefHeight="77.0" prefWidth="179.0">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Port" />
-                                          <ComboBox fx:id="cbPorts" prefWidth="150.0" />
-                                       </children>
-                                    </VBox>
-                                    <VBox prefHeight="77.0" prefWidth="179.0">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Baudrate" />
-                                          <ComboBox fx:id="cbBaudrates" prefWidth="150.0" />
-                                       </children>
-                                    </VBox>
-                                    <Pane nodeOrientation="RIGHT_TO_LEFT">
-                                       <children>
-                                          <Button fx:id="btnConnect" alignment="CENTER" layoutX="4.099999904632568" layoutY="3.0999999046325684" mnemonicParsing="false" onAction="#btnConnectPressed" text="Connect" textAlignment="CENTER" />
-                                       </children>
-                                    </Pane>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                  </content>
-                </TitledPane>
-                <TitledPane animated="false" text="Plot" />
-                <TitledPane animated="false" text="untitled 3">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  </content>
-                </TitledPane>
-              </panes>
-            </Accordion>
-         </left>
-         <right>
-            <LineChart fx:id="plot" prefHeight="800.0" prefWidth="3.0" title="asda" BorderPane.alignment="CENTER">
-              <xAxis>
-                <NumberAxis side="BOTTOM" fx:id="xAxis" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis fx:id="yAxis" side="LEFT" tickLabelFill="#bf2222" />
-              </yAxis>
-               <cursor>
-                  <Cursor fx:constant="CROSSHAIR" />
-               </cursor>
-            </LineChart>
-         </right>
          <center>
             <SwingNode fx:id="node" BorderPane.alignment="CENTER" />
          </center>
+         <top>
+            <HBox alignment="CENTER_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="43.0" prefWidth="1280.0" spacing="20.0" BorderPane.alignment="CENTER_RIGHT">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Port" />
+                  <ComboBox fx:id="cbPorts" prefWidth="150.0" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Baudrate" />
+                  <ComboBox fx:id="cbBaudrates" prefWidth="150.0" />
+                  <ToggleButton fx:id="btnConnect" mnemonicParsing="false" text="Connect" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <BorderPane.margin>
+                  <Insets right="20.0" />
+               </BorderPane.margin>
+            </HBox>
+         </top>
       </BorderPane>
    </children>
 </AnchorPane>
