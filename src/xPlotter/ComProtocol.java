@@ -53,7 +53,8 @@ public class ComProtocol {
      */
     public void disconnect() {
         try {
-            serialHandler.disconnect();
+
+             serialHandler.disconnect();
         } catch (Exception ex) {
             Logger.getLogger(ComProtocol.class.getName()).log(Level.SEVERE, null, ex);
         }

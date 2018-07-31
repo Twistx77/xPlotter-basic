@@ -1,28 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.embed.swing.SwingNode?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xPlotter.MainWindowController">
    <children>
       <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <SwingNode fx:id="node" BorderPane.alignment="CENTER" />
+            <AnchorPane minHeight="500.0" minWidth="500.0" BorderPane.alignment="CENTER">
+               <children>
+                  <LineChart fx:id="lineChart" animated="false" createSymbols="false" legendVisible="false" prefHeight="600.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+                    <xAxis>
+                      <NumberAxis animated="false" autoRanging="false" minorTickCount="0" minorTickLength="0.0" minorTickVisible="false" side="BOTTOM" tickLabelGap="5.0" tickLength="5.0" tickUnit="100.0" upperBound="1000.0" fx:id="xAxis" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis fx:id="yAxis" side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+               </children>
+            </AnchorPane>
          </center>
          <top>
             <HBox alignment="CENTER_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="43.0" prefWidth="1280.0" spacing="20.0" BorderPane.alignment="CENTER_RIGHT">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Port" />
-                  <ComboBox fx:id="cbPorts" prefWidth="150.0" />
+                  <ComboBox fx:id="cbPorts" onMouseClicked="#cbPortsPressed" prefWidth="150.0" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Baudrate" />
                   <ComboBox fx:id="cbBaudrates" prefWidth="150.0" />
-                  <ToggleButton fx:id="btnConnect" mnemonicParsing="false" text="Connect" />
+                  <ToggleButton fx:id="btnConnect" mnemonicParsing="false" onAction="#btnConnectPressed" style="-fx-base: #409CDA; -fx-text-fill: white;" text="Connect" textFill="WHITE" />
                </children>
                <opaqueInsets>
                   <Insets />
@@ -32,6 +49,54 @@
                </BorderPane.margin>
             </HBox>
          </top>
+         <bottom>
+            <Accordion BorderPane.alignment="CENTER">
+              <panes>
+                <TitledPane animated="false" style="#2595F2: #2595F2;" text="Config">
+                  <content>
+                    <AnchorPane minHeight="180.0">
+                           <children>
+                              <HBox layoutX="14.0" layoutY="23.0" spacing="40.0">
+                                 <children>
+                                    <VBox spacing="20.0">
+                                       <children>
+                                          <CheckBox fx:id="checkAutoRangeY" mnemonicParsing="false" selected="true" style="-fx-base: #2595F2;" text="Auto Range Y" />
+                                          <VBox fx:id="vBoxYLimits" disable="true" spacing="5.0">
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Upper Limit Y" />
+                                                <TextField fx:id="tfUpperLimitY" onAction="#limitsChangedY" onMouseExited="#limitsChangedY" prefHeight="26.0" prefWidth="108.0" text="1000" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Lower Limit Y" />
+                                                <TextField fx:id="tfLowerLimitY" onAction="#limitsChangedY" onMouseExited="#limitsChangedY" prefHeight="26.0" prefWidth="108.0" promptText="0" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </VBox>
+                                    <VBox spacing="20.0">
+                                       <children>
+                                          <VBox spacing="5.0">
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Upper Limit X" />
+                                                <TextField fx:id="tfUpperLimitX" onAction="#limitsChangedX" onMouseExited="#limitsChangedX" prefHeight="26.0" prefWidth="108.0" text="1000" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Lower Limit X" />
+                                                <TextField fx:id="tfLowerLimitX" onAction="#limitsChangedX" onMouseExited="#limitsChangedX" prefHeight="26.0" prefWidth="108.0" promptText="0" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </VBox>
+                                    <VBox spacing="20.0">
+                                       <children>
+                                          <CheckBox fx:id="checkVisibleLegend" mnemonicParsing="false" onAction="#checkVisibleLegendChanged" style="-fx-base: #2595F2;" text="Visible Lenged" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </TitledPane>
+              </panes>
+            </Accordion>
+         </bottom>
       </BorderPane>
    </children>
 </AnchorPane>

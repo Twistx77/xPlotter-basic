@@ -25,10 +25,12 @@ public class SerialHandler {// implements SerialPortEventListener {
 
     SerialPort serialPort;
     ComProtocol commProtocol;
+    private boolean connected;
 
 
     public SerialHandler(ComProtocol commProtocol) {
         this.commProtocol = commProtocol;
+        connected = false;
     }
 
     /**
@@ -37,8 +39,18 @@ public class SerialHandler {// implements SerialPortEventListener {
      * @return String array with the names of the serial ports found.
      */
     public String[] getAvailableSerialPorts() {
+        String[] portsList;
 
-        return SerialPortList.getPortNames();
+        portsList = SerialPortList.getPortNames();
+
+        if (portsList.length > 0 )
+            return portsList;
+
+        else
+            portsList= new String[1];
+
+        return portsList;
+
     }
 
     /**
@@ -59,6 +71,8 @@ public class SerialHandler {// implements SerialPortEventListener {
             serialPort.setEventsMask(mask);//Set mask
 
             serialPort.addEventListener(new SerialPortReader());//Add SerialPortEventListener
+
+            connected = true;
 
         } catch (SerialPortException ex) {
             System.out.println(ex);
@@ -104,11 +118,15 @@ public class SerialHandler {// implements SerialPortEventListener {
      */
     public void disconnect() {
         try {
-            serialPort.closePort();
+
+            if (connected)
+                serialPort.closePort();
+
         } catch (SerialPortException ex) {
             Logger.getLogger(SerialHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
 
     class SerialPortReader implements SerialPortEventListener {
 
@@ -132,11 +150,14 @@ public class SerialHandler {// implements SerialPortEventListener {
 
                                         String[] strings = toProcess.split(",");
 
+
+
                                         ArrayList<Float> values  = new ArrayList<Float>();
 
                                         for (int i = 0; i < strings.length; i++ )
                                         {
-                                            values.add(Float.parseFloat(strings[0]));
+
+                                            values.add(Float.parseFloat(strings[i]));
                                         }
                                         commProtocol.addNewValues(values);
                                     }

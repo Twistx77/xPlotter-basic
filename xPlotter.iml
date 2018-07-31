@@ -8,8 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="library" name="xchart-3.5.2" level="project" />
     <orderEntry type="library" name="jssc" level="project" />
-    <orderEntry type="library" name="jfreechart-1.0.19" level="project" />
   </component>
 </module>

@@ -1,50 +1,36 @@
 package xPlotter;
 
-import javafx.application.Platform;
-import javafx.embed.swing.SwingNode;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+
+
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-//import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.time.Millisecond;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.xy.XYDataset;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.VBox;
+
+import javafx.scene.control.CheckBox;
 
 
 
-import org.knowm.xchart.QuickChart;
-import org.knowm.xchart.SwingWrapper;
-import org.knowm.xchart.XChartPanel;
-import org.knowm.xchart.XYChart;
-
-import javax.swing.*;
-import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-
 public class MainWindowController implements Initializable  {
 
 
-    private TimeSeriesCollection timeSeriesCollection; // Collection of time series data
-    private XYDataset xyDataset; // dataset that will be used for the chart
-    private TimeSeries seriesX; // X series data
-    private TimeSeries seriesY; // Y series data
-    private TimeSeries seriesZ; // X series data
+    private static final int MAX_DATA_SERIES = 6 ;
+    private  int maxDataPoints = 1000;
+
 
 
     private AtomicInteger tick = new AtomicInteger(0);
@@ -53,14 +39,46 @@ public class MainWindowController implements Initializable  {
     @FXML
     private ComboBox<String> cbPorts, cbBaudrates;
 
+    @FXML
+    private ToggleButton btnConnect;
+
+
 
     @FXML
-    SwingNode node;
+    private NumberAxis xAxis;
+
+    @FXML
+    private NumberAxis yAxis;
+
+    @FXML
+    private VBox vBoxYLimits;
+
+    @FXML
+    private CheckBox checkAutoRangeY;
+
+    @FXML
+    private CheckBox checkVisibleLegend;
+
+    @FXML
+    private TextField tfUpperLimitY;
+    @FXML
+    private TextField tfLowerLimitY;
+
+    @FXML
+    private TextField tfUpperLimitX;
+    @FXML
+    private TextField tfLowerLimitX;
 
     ComProtocol comProtocol;
 
-    double phase = 0;
-    double[][] initdata = getSineData(phase);
+    private String[] strokeColors = { "#409CDA","#C6262E", "#68B723", "#A56DE2","#F37329", "#F9C440"};
+
+
+    @FXML
+    private LineChart<Number,Number> lineChart;
+
+
+    ArrayList<XYChart.Series<Number, Number>> dataSeries  = new ArrayList<XYChart.Series<Number, Number>>();
 
 
 
@@ -68,130 +86,145 @@ public class MainWindowController implements Initializable  {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        cbBaudrates.getItems().removeAll(cbBaudrates.getItems());
+        cbBaudrates.getItems().addAll("1200","2400","4800","9600","19200","38400","57600","115200","250000","256000");
+        cbBaudrates.getSelectionModel().select("115200");
+        createChart();
+
+        tfUpperLimitX.setText("1000");
+        tfLowerLimitX.setText("0");
+        tfUpperLimitY.setText("1000");
+        tfLowerLimitY.setText("0");
+
+
+        checkAutoRangeY.setOnAction((event) -> {
+
+            boolean selected = checkAutoRangeY.isSelected();
+
+            // If Auto Range Y is disabled we adjust the range to specified by text fields.
+
+            vBoxYLimits.setDisable(selected);
+
+            yAxis.setAutoRanging(selected);
+
+            if (!selected)
+            {
+                yAxis.setUpperBound(Integer.parseInt(tfUpperLimitY.getText()));
+                yAxis.setLowerBound(Integer.parseInt(tfLowerLimitY.getText()));
+            }
+        });
     }
 
     public void setCommProtocol(ComProtocol comProtocol)
     {
-
         this.comProtocol = comProtocol;
 
-        cbPorts.getItems().setAll(comProtocol.getAvailableSerialPorts());
-        cbPorts.getSelectionModel().select(0);
-        startChart();
+            cbPorts.getItems().setAll(comProtocol.getAvailableSerialPorts());
+            cbPorts.getSelectionModel().select(0);
+
     }
 
 
+    public void createChart()
+    {
+        xAxis.setLowerBound(0 );
+        xAxis.setUpperBound(maxDataPoints);
+        xAxis.setAnimated(false);
 
-    public void startChart(){
+        yAxis.setAnimated(false);
+        yAxis.setLabel("");
 
+        for (int i = 0; i<MAX_DATA_SERIES; i++)
+        {
+            XYChart.Series<Number, Number> dataSerie = new XYChart.Series<>();
+            dataSerie.setName("Value" + i);
 
+            dataSeries.add(dataSerie);
+            lineChart.getData().add(dataSerie);
+            dataSeries.get(i).getNode().lookup(".chart-series-line").setStyle("-fx-stroke: " + strokeColors[i]+";"+"-fx-stroke-width: 1px;"); // Sets lines colors
 
+        }
 
-        JFreeChart chartJFree = createChart();
-        ChartPanel chartPanel = new ChartPanel(chartJFree);
-        chartPanel.setFillZoomRectangle(true);
-        chartPanel.setMouseWheelEnabled(true);
-        chartPanel.setPreferredSize(new java.awt.Dimension(800,100));
+        lineChart.setAnimated(false);
 
-        node.setContent(chartPanel);
-
-
-
-
-
-        /*Thread updateThread = new Thread(() -> {
-            while (true) {
-                try {
-
-                    phase += 2 * Math.PI * 2 / 20.0;
-
-                    Thread.sleep(10);
-
-                    //final double[][] data = getSineData(phase);
-
-                    //series.getData().add(new XYChart.Data<>(tick.incrementAndGet(), (int) (Math.random() * 100)));
-                    //Platform.runLater(() -> series.getData().add(new XYChart.Data<>(tick.incrementAndGet(), (int) (Math.random() * 100))));
-                    //Platform.runLater(() -> chart.updateXYSeries("sine", data[0], data[1], null));
-
-                    this.timeSeriesCollection.getSeries(0).add(new Millisecond(),1000);
-                    this.timeSeriesCollection.getSeries(1).add(new Millisecond(),200);
-                    //this.timeSeriesCollection.getSeries(2).add(new Millisecond(),in_z);
-
-                   // sw.repaintChart();
-                    //System.out.println(tick.incrementAndGet() + " " + data[0]);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-
-        updateThread.setDaemon(true);
-
-        System.out.println("hola");
-        updateThread.start();
-        */
-
-
-
-
-
+        lineChart.setLegendVisible(false);
     }
 
 
     @FXML
-    public void btnConnectPressed(){
-        comProtocol.connect(cbPorts.getValue(),115200);
-    }
-
-
-    private JFreeChart createChart() {
-
-        JFreeChart chart = ChartFactory.createTimeSeriesChart(
-                "",  // title
-                "",             // x-axis label
-                "",   // y-axis label
-                timeSeriesCollection,            // data
-                true,               // create legend?
-                true,               // generate tooltips?
-                false               // generate URLs?
-        );
-
-        chart.setBackgroundPaint(new Color(0xF4, 0xF4, 0xF4));
-
-        XYPlot plot = (XYPlot) chart.getPlot();
-
-        XYLineAndShapeRenderer r1 = new XYLineAndShapeRenderer();
-        r1.setSeriesPaint(0, new Color(77, 196, 240));
-        r1.setSeriesPaint(1, new Color(0x00, 0xff, 0xff));
-        r1.setSeriesShapesVisible(0,  false);
-        r1.setSeriesShapesVisible(1,  false);
-        plot.getRenderer().setSeriesPaint(0, new Color(166, 226, 46));
-        plot.getRenderer().setSeriesPaint(1, new Color(77, 196, 240));
-
-        DateAxis axis = (DateAxis) plot.getDomainAxis();
-        axis.setAutoRange(true);
-        //axis.setFixedAutoRange(6000.0);
-
-        return chart;
-    }
-
-    private static double[][] getSineData(double phase) {
-
-        double[] xData = new double[1000];
-        double[] yData = new double[1000];
-        for (int i = 0; i < xData.length; i++) {
-            double radians = phase + (2 * Math.PI / xData.length * i);
-            xData[i] = radians;
-            yData[i] = Math.sin(radians);
+    public void btnConnectPressed()
+    {
+        if (btnConnect.isSelected() == true)
+        {
+            comProtocol.connect(cbPorts.getValue(), Integer.parseInt(cbBaudrates.getValue()));
+            btnConnect.setText("Disconnect");
+            btnConnect.setStyle("-fx-base: #CB3036");
         }
-        return new double[][] { xData, yData };
+        else if (btnConnect.isSelected() == false)
+        {
+            comProtocol.disconnect();
+            btnConnect.setText("Connect");
+            btnConnect.setStyle("-fx-base: #409CDA");
+        }
     }
+
+    @FXML
+    private void checkVisibleLegendChanged()
+    {
+        lineChart.setLegendVisible(checkVisibleLegend.isSelected());
+    }
+
+    @FXML
+    private void cbPortsPressed ()
+    {
+        cbPorts.getItems().removeAll(cbPorts.getItems());
+        cbPorts.getItems().setAll(comProtocol.getAvailableSerialPorts());
+        cbPorts.getSelectionModel().select(0);
+
+    }
+
+    @FXML
+    private void limitsChangedY()
+    {
+        int upperLimit = Integer.parseInt(tfUpperLimitY.getText());
+        int lowerLimit = Integer.parseInt(tfLowerLimitY.getText());
+
+        yAxis.setUpperBound(upperLimit);
+        yAxis.setLowerBound(lowerLimit);
+        yAxis.setTickUnit(upperLimit/10);
+    }
+
+    @FXML
+    private void limitsChangedX()
+    {
+        int upperLimit = Integer.parseInt(tfUpperLimitX.getText());
+        int lowerLimit = Integer.parseInt(tfLowerLimitX.getText());
+
+        maxDataPoints = upperLimit;
+        xAxis.setUpperBound(upperLimit);
+        xAxis.setLowerBound(lowerLimit);
+        xAxis.setTickUnit(upperLimit/10);
+
+    }
+
 
     public void addNewValues(ArrayList<Float> values)
     {
+        long time = tick.incrementAndGet();
 
         for (int i = 0; i< values.size(); i++) {
-            this.timeSeriesCollection.getSeries(i).add(new Millisecond(), values.get(i));
+
+            dataSeries.get(i).getData().add(new XYChart.Data<>(time, values.get(i)));
+
+            // remove points to keep us at no more than maxDataPoints
+            if (dataSeries.get(i).getData().size() > maxDataPoints)
+            {
+                dataSeries.get(i).getData().remove(0, dataSeries.get(i).getData().size() - maxDataPoints);
+            }
+
+            // update
+            xAxis.setLowerBound(time - maxDataPoints);
+            xAxis.setUpperBound(time - 1);
         }
     }
 }

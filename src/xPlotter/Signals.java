@@ -28,7 +28,6 @@ public class Signals{
        // checkMin(values);
         //calcAverage(values);
 
-        System.out.println(values.size());
         mainWindowController.addNewValues(values);
     }
 
