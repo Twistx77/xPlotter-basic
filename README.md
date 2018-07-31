@@ -19,7 +19,7 @@ xPlotter is a simple plotter created as an alternative to the serial plotter pro
 - Adjustable parameters from embedded device using custom API.
 
 ### Download
-
+To download a binary jar please head to the [release page](https://github.com/Twistx77/xPlotter/releases/tag/0.1) 
 
 
 
