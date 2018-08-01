@@ -12,6 +12,8 @@ xPlotter is a simple plotter created as an alternative to the serial plotter pro
 
 
 ### Future Features
+- Show last data point received.
+- Scan-like data representation.
 - Log data.
 - Cursors to measure difference between signals.
 - Minimun, Maximun and Average value.
